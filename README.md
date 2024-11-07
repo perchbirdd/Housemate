@@ -1,6 +1,6 @@
-[![Download count](https://img.shields.io/endpoint?url=https%3A%2F%2Fvz32sgcoal.execute-api.us-east-1.amazonaws.com%2FHousemate)](https://github.com/lmcintyre/Housemate)
-[![Build status](https://github.com/lmcintyre/Housemate/actions/workflows/build.yml/badge.svg)](https://github.com/lmcintyre/Housemate)
-[![Latest release](https://img.shields.io/github/v/release/lmcintyre/Housemate)](https://github.com/lmcintyre/Housemate)
+[![Download count](https://img.shields.io/endpoint?url=https%3A%2F%2Fvz32sgcoal.execute-api.us-east-1.amazonaws.com%2FHousemate)](https://github.com/perchbirdd/Housemate)
+[![Build status](https://github.com/perchbirdd/Housemate/actions/workflows/build.yml/badge.svg)](https://github.com/perchbirdd/Housemate)
+[![Latest release](https://img.shields.io/github/v/release/perchbirdd/Housemate)](https://github.com/perchbirdd/Housemate)
 
 # Housemate
 
