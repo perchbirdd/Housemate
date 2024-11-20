@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Lumina.Excel.GeneratedSheets;
+using Lumina.Excel.Sheets;
 
 namespace Housemate
 {
     public class HousingData
     {
         private readonly Dictionary<uint, HousingFurniture> _furnitureDict;
-        private readonly Dictionary<uint, Item> _itemDict;
+        private readonly Dictionary<uint, Item?> _itemDict;
         private readonly Dictionary<uint, Stain> _stainDict;
 
         private readonly Dictionary<uint, Dictionary<uint, CommonLandSet>> _territoryToLandSetDict;
@@ -21,14 +21,14 @@ namespace Housemate
 
             _territoryToLandSetDict = new Dictionary<uint, Dictionary<uint, CommonLandSet>>();
 
-            for (uint i = 0; i < sheet.RowCount; i++)
+            for (uint i = 0; i < sheet.Count; i++)
             {
                 if (terriKeys.Length < i) continue;
                 var row = sheet.GetRow(i);
                 var rowDict = new Dictionary<uint, CommonLandSet>();
-                for (var j = 0; j < row.LandSets.Length; j++)
+                for (var j = 0; j < row.LandSet.Count; j++)
                 {
-                    var cset = CommonLandSet.FromExd(row.LandSets[j], j);
+                    var cset = CommonLandSet.FromExd(row.LandSet[j], j);
                     rowDict[cset.PlacardId] = cset;
                 }
 
@@ -38,12 +38,20 @@ namespace Housemate
             var unitedExteriorSheet = DalamudApi.DataManager.GetExcelSheet<HousingUnitedExterior>();
             _unitedDict = new Dictionary<uint, uint>();
             foreach (var row in unitedExteriorSheet)
-            foreach (var item in row.Item)
-                _unitedDict[item.Row] = row.RowId;
+            {
+                _unitedDict[row.Roof.RowId] = row.RowId;
+                _unitedDict[row.Walls.RowId] = row.RowId;
+                _unitedDict[row.Windows.RowId] = row.RowId;
+                _unitedDict[row.Door.RowId] = row.RowId;
+                _unitedDict[row.OptionalRoof.RowId] = row.RowId;
+                _unitedDict[row.OptionalWall.RowId] = row.RowId;
+                _unitedDict[row.OptionalSignboard.RowId] = row.RowId;
+                _unitedDict[row.Fence.RowId] = row.RowId;
+            }
 
             _itemDict = DalamudApi.DataManager.GetExcelSheet<Item>()
-                .Where(item => item.AdditionalData != 0 && (item.ItemSearchCategory.Row == 65 || item.ItemSearchCategory.Row == 66))
-                .ToDictionary(row => row.AdditionalData, row => row);
+                .Where(item => item.AdditionalData.RowId != 0 && (item.ItemSearchCategory.RowId == 65 || item.ItemSearchCategory.RowId == 66))
+                .ToDictionary(row => row.AdditionalData.RowId, row => (Item?) row);
 
             _stainDict = DalamudApi.DataManager.GetExcelSheet<Stain>().ToDictionary(row => row.RowId, row => row);
             _furnitureDict = DalamudApi.DataManager.GetExcelSheet<HousingFurniture>().ToDictionary(row => row.RowId, row => row);
@@ -74,7 +82,7 @@ namespace Housemate
             return _furnitureDict.TryGetValue(id, out furniture);
         }
 
-        public bool IsUnitedExteriorPart(uint id, out Item item)
+        public bool IsUnitedExteriorPart(uint id, out Item? item)
         {
             item = null;
             if (!_unitedDict.TryGetValue(id, out var unitedId))
@@ -90,7 +98,7 @@ namespace Housemate
             return _territoryToLandSetDict.TryGetValue(id, out dict);
         }
 
-        public bool TryGetItem(uint id, out Item item)
+        public bool TryGetItem(uint id, out Item? item)
         {
             return _itemDict.TryGetValue(id, out item);
         }

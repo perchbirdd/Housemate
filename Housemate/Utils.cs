@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Numerics;
 using ImGuiNET;
-using Lumina.Excel.GeneratedSheets;
+using Lumina.Excel.Sheets;
 
 namespace Housemate
 {
@@ -100,7 +100,7 @@ namespace Housemate
             ImGui.Text("");
 
             if (buttonVisible && Collides(topLeft, new Vector2(right, bottom), mousePos))
-                ColorTooltip(color.Name, floatColor);
+                ColorTooltip(color.Name.ExtractText(), floatColor);
         }
         
         private static bool Collides(Vector2 origin, Vector2 bounds, Vector2 pos)

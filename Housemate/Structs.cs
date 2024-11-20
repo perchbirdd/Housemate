@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using Lumina.Excel.GeneratedSheets;
+using Lumina.Excel.Sheets;
 
 namespace Housemate
 {
@@ -54,14 +54,14 @@ namespace Housemate
         public byte Size;
         public int PlotIndex;
 
-        public static CommonLandSet FromExd(HousingLandSet.LandSet lset, int index)
+        public static CommonLandSet FromExd(HousingLandSet.LandSetStruct lset, int index)
         {
             var ret = new CommonLandSet();
-            ret.LandRange = lset.LandRange;
+            ret.LandRange = lset.UnknownRange1;
             ret.PlacardId = lset.PlacardId;
             ret.UnknownRange1 = lset.UnknownRange1;
             ret.InitialPrice = lset.InitialPrice;
-            ret.Size = lset.Size;
+            ret.Size = lset.PlotSize;
             ret.PlotIndex = index;
             return ret;
         }
@@ -83,10 +83,10 @@ namespace Housemate
         public bool IsExterior;
         public int FixtureType;
         public int FixtureKey;
-        public Stain Stain;
-        public Item Item;
+        public Stain? Stain;
+        public Item? Item;
 
-        public CommonFixture(bool isExterior, int fixtureType, int fixtureKey, Stain stain, Item item)
+        public CommonFixture(bool isExterior, int fixtureType, int fixtureKey, Stain? stain, Item? item)
         {
             IsExterior = isExterior;
             FixtureType = fixtureType;

@@ -160,12 +160,12 @@ namespace Housemate
             var roof = customize.GetPart(ExteriorPartsType.Roof);
             if (roof.FixtureKey != 0 && Data.IsUnitedExteriorPart(roof.FixtureKey, out var roofItem))
             {
-                ImGui.Text($"Exterior: {roofItem.Name}");
+                ImGui.Text($"Exterior: {roofItem.Value.Name.ExtractText()}");
 
                 if (roof.Color != 0 && Data.TryGetStain(roof.Color, out var color))
                 {
                     ImGui.SameLine();
-                    Utils.StainButton(roofItem.Name, color);
+                    Utils.StainButton(roofItem.Value.Name.ExtractText(), color);
                 }
             }
             else
@@ -175,12 +175,12 @@ namespace Housemate
                     var type = (ExteriorPartsType) i;
                     var part = customize.GetPart(type);
                     if (!Data.TryGetItem(part.FixtureKey, out var item)) continue;
-                    ImGui.Text($"{Utils.GetExteriorPartDescriptor(type)}: {item.Name}");
+                    ImGui.Text($"{Utils.GetExteriorPartDescriptor(type)}: {item.Value.Name.ExtractText()}");
 
                     if (part.Color != 0 && Data.TryGetStain(part.Color, out var color))
                     {
                         ImGui.SameLine();
-                        Utils.StainButton(item.Name, color);
+                        Utils.StainButton(item.Value.Name.ExtractText(), color);
                     }
                 }
             }
@@ -300,11 +300,11 @@ namespace Housemate
 
                 if (Data.IsUnitedExteriorPart((uint) exterior[0].FixtureKey, out var unitedItem))
                 {
-                    ImGui.Text($"Walls: {unitedItem.Name}");
-                    if (exterior[0].Stain != null && exterior[0].Stain.RowId != 0)
+                    ImGui.Text($"Walls: {unitedItem.Value.Name.ExtractText()}");
+                    if (exterior[0].Stain != null && exterior[0].Stain.Value.RowId != 0)
                     {
                         ImGui.SameLine();
-                        Utils.StainButton($"{exterior[0].Stain.Name}##{unitedItem.Name}", exterior[0].Stain);
+                        Utils.StainButton($"{exterior[0].Stain.Value.Name.ExtractText()}##{unitedItem.Value.Name.ExtractText()}", exterior[0].Stain.Value);
                     }
 
                     ImGui.NextColumn();
@@ -317,11 +317,11 @@ namespace Housemate
 
                     var desc = Utils.GetExteriorPartDescriptor((ExteriorPartsType) ext);
 
-                    ImGui.Text($"{desc}: {exterior[ext].Item.Name}");
-                    if (exterior[ext].Stain != null && exterior[ext].Stain.RowId != 0)
+                    ImGui.Text($"{desc}: {exterior[ext].Item.Value.Name.ExtractText()}");
+                    if (exterior[ext].Stain != null && exterior[ext].Stain.Value.RowId != 0)
                     {
                         ImGui.SameLine();
-                        Utils.StainButton($"##{exterior[ext].Item.Name}", exterior[ext].Stain);
+                        Utils.StainButton($"##{exterior[ext].Item.Value.Name.ExtractText()}", exterior[ext].Stain.Value);
                     }
                 }
 
@@ -478,7 +478,7 @@ namespace Housemate
 
                         ImGui.TextColored(color, $"{Utils.GetFloorDescriptor((InteriorFloor) i)} {fixtureName}");
                         ImGui.NextColumn();
-                        ImGui.TextColored(color, $"{fixtures[j].Item.Name}");
+                        ImGui.TextColored(color, $"{fixtures[j].Item.Value.Name.ExtractText()}");
                         ImGui.NextColumn();
                     }
 
