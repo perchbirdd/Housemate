@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Numerics;
 using System.Runtime.InteropServices;
 using Dalamud.Game.ClientState.Objects.Types;
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 
 namespace Housemate
 {
@@ -28,19 +28,19 @@ namespace Housemate
         private static HousingData Data => HousingData.Instance;
         private static HousingMemory Mem => HousingMemory.Instance;
 
-        public HousemateUI(Configuration configuration)
+        public unsafe HousemateUI(Configuration configuration)
         {
             _configuration = configuration;
 
             var clipperNative = Marshal.AllocHGlobal(Marshal.SizeOf<ImGuiListClipper>());
             var clipper = new ImGuiListClipper();
             Marshal.StructureToPtr(clipper, clipperNative, false);
-            _clipper = new ImGuiListClipperPtr(clipperNative);
+            _clipper = new ImGuiListClipperPtr((ImGuiListClipper*)clipperNative.ToPointer());
         }
         
         public unsafe void Dispose()
         {
-            Marshal.FreeHGlobal(new IntPtr(_clipper.NativePtr));
+            Marshal.FreeHGlobal(new IntPtr(_clipper.Handle));
         }
 
         public void Draw()
